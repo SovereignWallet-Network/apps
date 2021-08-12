@@ -1,37 +1,37 @@
-// Copyright 2017-2020 @polkadot/app-parachains authors & contributors
+// Copyright 2017-2021 @polkadot/app-parachains authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import BN from 'bn.js';
+import type { LeasePeriod } from '../types';
+
 import React from 'react';
-import { SummaryBox, CardSummary } from '@polkadot/react-components';
-import { useApi } from '@polkadot/react-hooks';
-import { BestNumber } from '@polkadot/react-query';
+
+import SummarySession from '@polkadot/app-explorer/SummarySession';
+import { CardSummary, SummaryBox } from '@polkadot/react-components';
 import { formatNumber, isNumber } from '@polkadot/util';
 
 import { useTranslation } from '../translate';
 
 interface Props {
+  leasePeriod: LeasePeriod | null;
   parachainCount?: number;
   proposalCount?: number;
-  nextFreeId?: BN;
+  upcomingCount?: number;
 }
 
-function Summary ({ nextFreeId, parachainCount, proposalCount }: Props): React.ReactElement<Props> {
+function Summary ({ leasePeriod, parachainCount, proposalCount, upcomingCount }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { api } = useApi();
 
   return (
     <SummaryBox>
       <section>
-        <CardSummary label={t<string>('relay')}>
-          {api.query.parachains
-            ? t<string>('yes')
-            : t<string>('no')
-          }
-        </CardSummary>
         {isNumber(parachainCount) && (
           <CardSummary label={t<string>('parachains')}>
             {formatNumber(parachainCount)}
+          </CardSummary>
+        )}
+        {isNumber(upcomingCount) && (
+          <CardSummary label={t<string>('upcoming')}>
+            {formatNumber(upcomingCount)}
           </CardSummary>
         )}
         {isNumber(proposalCount) && (
@@ -39,19 +39,29 @@ function Summary ({ nextFreeId, parachainCount, proposalCount }: Props): React.R
             {formatNumber(proposalCount)}
           </CardSummary>
         )}
-        {api.query.parachains && nextFreeId && (
-          <CardSummary label={t<string>('next id')}>
-            {formatNumber(nextFreeId)}
+      </section>
+      <section>
+        {leasePeriod && (
+          <CardSummary label={t<string>('current lease')}>
+            {formatNumber(leasePeriod.currentPeriod)}
           </CardSummary>
         )}
       </section>
       <section>
-        <CardSummary
+        {leasePeriod && (
+          <CardSummary
+            label={t<string>('lease period')}
+            progress={{
+              total: leasePeriod.length,
+              value: leasePeriod.progress,
+              withTime: true
+            }}
+          />
+        )}
+        <SummarySession
           className='media--800'
-          label={t<string>('best block')}
-        >
-          <BestNumber />
-        </CardSummary>
+          withEra={false}
+        />
       </section>
     </SummaryBox>
   );

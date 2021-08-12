@@ -1,10 +1,11 @@
-// Copyright 2017-2020 @polkadot/apps authors & contributors
+// Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { RuntimeVersion } from '@polkadot/types/interfaces';
+import type { RuntimeVersion } from '@polkadot/types/interfaces';
 
 import React from 'react';
 import styled from 'styled-components';
+
 import { ChainImg, Icon } from '@polkadot/react-components';
 import { useApi, useCall, useIpfs, useToggle } from '@polkadot/react-hooks';
 import { BestNumber, Chain } from '@polkadot/react-query';
@@ -18,8 +19,8 @@ interface Props {
 
 function ChainInfo ({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { api } = useApi();
-  const runtimeVersion = useCall<RuntimeVersion>(api.rpc.state.subscribeRuntimeVersion);
+  const { api, isApiReady } = useApi();
+  const runtimeVersion = useCall<RuntimeVersion>(isApiReady && api.rpc.state.subscribeRuntimeVersion);
   const { ipnsChain } = useIpfs();
   const [isEndpointsVisible, toggleEndpoints] = useToggle();
   const canToggle = !ipnsChain;
@@ -57,7 +58,7 @@ function ChainInfo ({ className }: Props): React.ReactElement<Props> {
 
 export default React.memo(styled(ChainInfo)`
   box-sizing: border-box;
-  padding: 0.75rem 1rem 0.75rem 1.5rem;
+  padding: 0.5rem 1rem 0.5rem 0;
   margin: 0;
 
   .apps--SideBar-logo-inner {
@@ -90,16 +91,24 @@ export default React.memo(styled(ChainInfo)`
     .info {
       flex: 1;
       padding-right: 0.5rem;
+      text-align: right;
 
-      .bestNumber,
       .chain {
+        max-width: 16rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .chain, .bestNumber {
         font-size: 0.9rem;
         line-height: 1.2;
       }
 
       .runtimeVersion {
-        font-size: 0.75rem;
-        line-height: 1.2;
+          font-size: 0.75rem;
+          line-height: 1.2;
+          letter-spacing: -0.01em;
       }
     }
   }

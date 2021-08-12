@@ -1,16 +1,17 @@
-// Copyright 2017-2020 @polkadot/app-storage authors & contributors
+// Copyright 2017-2021 @polkadot/app-storage authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { QueryTypes, ParitalQueryTypes } from '../types';
+import type { ParitalQueryTypes, QueryTypes } from '../types';
 
 import React, { useCallback, useRef } from 'react';
 import { Route, Switch } from 'react-router';
+
 import { Tabs } from '@polkadot/react-components';
 
+import { useTranslation } from '../translate';
 import Consts from './Consts';
 import Modules from './Modules';
 import Raw from './Raw';
-import { useTranslation } from '../translate';
 
 interface Props {
   basePath: string;
@@ -45,12 +46,10 @@ function Selection ({ basePath, onAdd }: Props): React.ReactElement<Props> {
 
   return (
     <>
-      <header>
-        <Tabs
-          basePath={basePath}
-          items={itemsRef.current}
-        />
-      </header>
+      <Tabs
+        basePath={basePath}
+        items={itemsRef.current}
+      />
       <Switch>
         <Route path={`${basePath}/constants`}><Consts onAdd={_onAdd} /></Route>
         <Route path={`${basePath}/raw`}><Raw onAdd={_onAdd} /></Route>

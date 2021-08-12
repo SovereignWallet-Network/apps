@@ -1,9 +1,10 @@
-// Copyright 2017-2020 @polkadot/app-extrinsics authors & contributors
+// Copyright 2017-2021 @polkadot/app-extrinsics authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { AppProps as Props } from '@polkadot/react-components/types';
+import type { AppProps as Props } from '@polkadot/react-components/types';
 
 import React, { useRef } from 'react';
+
 import { Tabs } from '@polkadot/react-components';
 
 import Selection from './Selection';
@@ -15,17 +16,15 @@ function ExtrinsicsApp ({ basePath }: Props): React.ReactElement<Props> {
   const itemsRef = useRef([{
     isRoot: true,
     name: 'create',
-    text: t<string>('Extrinsic submission')
+    text: t<string>('Submission')
   }]);
 
   return (
     <main className='extrinsics--App'>
-      <header>
-        <Tabs
-          basePath={basePath}
-          items={itemsRef.current}
-        />
-      </header>
+      <Tabs
+        basePath={basePath}
+        items={itemsRef.current}
+      />
       <Selection />
     </main>
   );

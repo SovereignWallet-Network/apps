@@ -1,20 +1,20 @@
-// Copyright 2017-2020 @polkadot/react-query authors & contributors
+// Copyright 2017-2021 @polkadot/react-query authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { IconName } from '@fortawesome/fontawesome-svg-core';
-import { DeriveAccountInfo, DeriveAccountRegistration } from '@polkadot/api-derive/types';
-import { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
+import type { IconName } from '@fortawesome/fontawesome-svg-core';
+import type { DeriveAccountInfo, DeriveAccountRegistration } from '@polkadot/api-derive/types';
+import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
 
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { ThemeProps } from '@polkadot/react-components/types';
 import styled from 'styled-components';
-import registry from '@polkadot/react-api/typeRegistry';
+
 import { AccountSidebarToggle } from '@polkadot/app-accounts/Sidebar';
-import { useCall, useApi } from '@polkadot/react-hooks';
+import registry from '@polkadot/react-api/typeRegistry';
+import { useApi, useCall } from '@polkadot/react-hooks';
 import { isFunction, stringToU8a } from '@polkadot/util';
 
-import { getAddressName } from './util';
 import Badge from './Badge';
+import { getAddressName } from './util';
 
 interface Props {
   children?: React.ReactNode;
@@ -117,12 +117,12 @@ function extractIdentity (address: string, identity: DeriveAccountRegistration):
       : identity.displayParent.replace(/[^\x20-\x7E]/g, '')
   );
   const elem = createIdElem(
-    <span className={`name${isGood ? ' isGood' : ''}`}>
+    <span className={`name${isGood && !isBad ? ' isGood' : ''}`}>
       <span className='top'>{displayParent || displayName}</span>
       {displayParent && <span className='sub'>{`/${displayName || ''}`}</span>}
     </span>,
-    isGood ? 'green' : (isBad ? 'red' : 'gray'),
-    identity.parent ? 'link' : (isGood ? 'check' : 'minus')
+    (isBad ? 'red' : (isGood ? 'green' : 'gray')),
+    identity.parent ? 'link' : (isGood && !isBad ? 'check' : 'minus')
   );
 
   displayCache.set(address, elem);
@@ -183,7 +183,9 @@ function AccountName ({ children, className = '', defaultName, label, onClick, o
 }
 
 export default React.memo(styled(AccountName)`
+  align-items: center;
   border: 1px dotted transparent;
+  display: inline-flex;
   vertical-align: middle;
   white-space: nowrap;
 
@@ -193,12 +195,14 @@ export default React.memo(styled(AccountName)`
   }
 
   .via-identity {
-    align-items: end;
+    align-items: center;
     display: inline-flex;
     width: 100%;
 
     .name {
-      font-weight: 400 !important;
+      align-items: center;
+      display: inline-flex;
+      font-weight: var(--font-weight-normal) !important;
       filter: grayscale(100%);
       line-height: 1;
       opacity: 0.6;
@@ -210,7 +214,7 @@ export default React.memo(styled(AccountName)`
       }
 
       &.isAddress {
-        font-family: ${({ theme }: ThemeProps) => theme.fontMono};
+        font: var(--font-mono);
         text-transform: none;
       }
 

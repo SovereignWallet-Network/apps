@@ -1,25 +1,24 @@
-// Copyright 2017-2020 @polkadot/app-democracy authors & contributors
+// Copyright 2017-2021 @polkadot/app-democracy authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeriveDispatch } from '@polkadot/api-derive/types';
-import { BlockNumber } from '@polkadot/types/interfaces';
+import type { DeriveDispatch } from '@polkadot/api-derive/types';
 
 import React from 'react';
+
 import { LinkExternal } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
+import { useBestNumber } from '@polkadot/react-hooks';
 import { BlockToTime } from '@polkadot/react-query';
 import { formatNumber } from '@polkadot/util';
 
-import ProposalCell from '../Overview/ProposalCell';
 import PreImageButton from '../Overview/PreImageButton';
+import ProposalCell from '../Overview/ProposalCell';
 
 interface Props {
   value: DeriveDispatch;
 }
 
 function DispatchEntry ({ value: { at, image, imageHash, index } }: Props): React.ReactElement<Props> {
-  const { api } = useApi();
-  const bestNumber = useCall<BlockNumber>(api.derive.chain.bestNumber);
+  const bestNumber = useBestNumber();
 
   return (
     <tr>
@@ -31,7 +30,7 @@ function DispatchEntry ({ value: { at, image, imageHash, index } }: Props): Reac
       <td className='number together'>
         {bestNumber && (
           <>
-            <BlockToTime blocks={at.sub(bestNumber)} />
+            <BlockToTime value={at.sub(bestNumber)} />
             #{formatNumber(at)}
           </>
         )}

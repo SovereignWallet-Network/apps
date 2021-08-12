@@ -1,4 +1,4 @@
-// Copyright 2017-2020 @polkadot/react-components authors & contributors
+// Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
@@ -6,12 +6,12 @@ import styled from 'styled-components';
 
 import CopyButton from './CopyButton';
 import Labelled from './Labelled';
-import { classes } from './util';
 
 interface Props {
   children?: React.ReactNode;
   className?: string;
   help?: React.ReactNode;
+  isDisabled?: boolean;
   isError?: boolean;
   isFull?: boolean;
   isHidden?: boolean;
@@ -25,7 +25,7 @@ interface Props {
   withLabel?: boolean;
 }
 
-function Output ({ children, className = '', help, isError, isFull, isHidden, isMonospace, isSmall, isTrimmed, label, labelExtra, value, withCopy = false, withLabel }: Props): React.ReactElement<Props> {
+function Output ({ children, className = '', help, isDisabled, isError, isFull, isHidden, isMonospace, isSmall, isTrimmed, label, labelExtra, value, withCopy = false, withLabel }: Props): React.ReactElement<Props> {
   return (
     <Labelled
       className={className}
@@ -37,22 +37,16 @@ function Output ({ children, className = '', help, isError, isFull, isHidden, is
       labelExtra={labelExtra}
       withLabel={withLabel}
     >
-      <div className={classes('ui--output', isError && 'error', isMonospace && 'monospace')}>
+      <div className={`ui--output ui dropdown selection ${isError ? ' error' : ''}${isMonospace ? ' monospace' : ''}${isDisabled ? ' disabled' : ''}`}>
         {isTrimmed && value && (value.length > 256)
           ? `${value.substr(0, 96)}…${value.substr(-96)}`
           : value
         }
         {children}
-        {withCopy
-          ? (
-            <CopyButton
-              className='ui--output-button'
-              value={value}
-            />
-          )
-          : null
-        }
       </div>
+      {withCopy && (
+        <CopyButton value={value} />
+      )}
     </Labelled>
   );
 }

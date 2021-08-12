@@ -1,11 +1,13 @@
-// Copyright 2017-2020 @polkadot/app-staking authors & contributors
+// Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeriveBalancesAll } from '@polkadot/api-derive/types';
-import { AccountId, StakingLedger } from '@polkadot/types/interfaces';
+import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
+import type { Option } from '@polkadot/types';
+import type { AccountId, StakingLedger } from '@polkadot/types/interfaces';
 
 import React, { useEffect, useState } from 'react';
-import { Option } from '@polkadot/types';
+
+import { MarkError, MarkWarning } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../../translate';
@@ -59,7 +61,7 @@ function ValidateController ({ accountId, controllerId, defaultController, onErr
         newError = t('A controller account should not be set to manage multiple stashes. The selected controller is already controlling {{stashId}}', { replace: { stashId } });
       } else if (allBalances?.freeBalance.isZero()) {
         isFatal = true;
-        newError = t('The controller does no have sufficient funds available to cover transaction fees. Ensure that a funded controller is used.');
+        newError = t('The controller does not have sufficient funds available to cover transaction fees. Ensure that a funded controller is used.');
       } else if (controllerId === accountId) {
         newError = t('Distinct stash and controller accounts are recommended to ensure fund security. You will be allowed to make the transaction, but take care to not tie up all funds, only use a portion of the available funds during this period.');
       }
@@ -74,9 +76,9 @@ function ValidateController ({ accountId, controllerId, defaultController, onErr
   }
 
   return (
-    <article className={isFatal ? 'error' : 'warning'}>
-      <div>{error}</div>
-    </article>
+    isFatal
+      ? <MarkError content={error} />
+      : <MarkWarning content={error} />
   );
 }
 

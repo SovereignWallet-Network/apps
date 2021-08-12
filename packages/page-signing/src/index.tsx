@@ -1,16 +1,17 @@
-// Copyright 2017-2020 @polkadot/app-signing authors & contributors
+// Copyright 2017-2021 @polkadot/app-signing authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { AppProps as Props } from '@polkadot/react-components/types';
+import type { AppProps as Props } from '@polkadot/react-components/types';
 
 import React, { useRef } from 'react';
 import { Route, Switch } from 'react-router';
+
 import Tabs from '@polkadot/react-components/Tabs';
 
 import Hash from './Hash';
 import Sign from './Sign';
-import Verify from './Verify';
 import { useTranslation } from './translate';
+import Verify from './Verify';
 
 function SigningApp ({ basePath }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
@@ -33,12 +34,10 @@ function SigningApp ({ basePath }: Props): React.ReactElement<Props> {
 
   return (
     <main className='toolbox--App'>
-      <header>
-        <Tabs
-          basePath={basePath}
-          items={itemsRef.current}
-        />
-      </header>
+      <Tabs
+        basePath={basePath}
+        items={itemsRef.current}
+      />
       <Switch>
         <Route path={`${basePath}/hash`}><Hash /></Route>
         <Route path={`${basePath}/verify`}><Verify /></Route>

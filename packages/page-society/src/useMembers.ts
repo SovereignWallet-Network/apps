@@ -1,18 +1,19 @@
-// Copyright 2017-2020 @polkadot/app-society authors & contributors
+// Copyright 2017-2021 @polkadot/app-society authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeriveSocietyMember } from '@polkadot/api-derive/types';
-import { OwnMembers } from './types';
+import type { DeriveSocietyMember } from '@polkadot/api-derive/types';
+import type { OwnMembers } from './types';
 
 import { useEffect, useState } from 'react';
+
 import { useAccounts, useApi, useCall } from '@polkadot/react-hooks';
 
 function transform (allAccounts: string[], members: DeriveSocietyMember[]): OwnMembers {
   const allMembers = members
-    .filter((member): boolean => !member.isSuspended)
-    .map((member): string => member.accountId.toString());
+    .filter((member) => !member.isSuspended)
+    .map(({ accountId }) => accountId.toString());
   const ownMembers = allMembers
-    .filter((address): boolean => allAccounts.includes(address));
+    .filter((address) => allAccounts.includes(address));
 
   return { allMembers, isMember: ownMembers.length !== 0, ownMembers };
 }

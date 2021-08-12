@@ -1,14 +1,15 @@
-// Copyright 2017-2020 @polkadot/app-treasury authors & contributors
+// Copyright 2017-2021 @polkadot/app-treasury authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { BlockNumber, OpenTip, OpenTipTo225 } from '@polkadot/types/interfaces';
+import type { Option } from '@polkadot/types';
+import type { OpenTip, OpenTipTo225 } from '@polkadot/types/interfaces';
 
 import BN from 'bn.js';
 import React, { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
+
 import { Table, Toggle } from '@polkadot/react-components';
-import { useApi, useCall } from '@polkadot/react-hooks';
-import { Option } from '@polkadot/types';
+import { useApi, useBestNumber, useCall } from '@polkadot/react-hooks';
 
 import { useTranslation } from '../translate';
 import Tip from './Tip';
@@ -19,7 +20,6 @@ interface Props {
   hashes?: string[] | null;
   isMember: boolean;
   members: string[];
-  onRefresh: () => void;
   onSelectTip: (hash: string, isSelected: boolean, value: BN) => void,
 }
 
@@ -48,12 +48,12 @@ function extractTips (tipsWithHashes?: [[string[]], Option<OpenTip>[]], inHashes
     );
 }
 
-function Tips ({ className = '', defaultId, hashes, isMember, members, onRefresh, onSelectTip }: Props): React.ReactElement<Props> {
+function Tips ({ className = '', defaultId, hashes, isMember, members, onSelectTip }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
   const [onlyUntipped, setOnlyUntipped] = useState(false);
-  const bestNumber = useCall<BlockNumber>(api.derive.chain.bestNumber);
-  const tipsWithHashes = useCall<[[string[]], Option<OpenTip>[]]>(hashes && api.query.treasury.tips.multi, [hashes], TIP_OPTS);
+  const bestNumber = useBestNumber();
+  const tipsWithHashes = useCall<[[string[]], Option<OpenTip>[]]>(hashes && (api.query.tips || api.query.treasury).tips.multi, [hashes], TIP_OPTS);
 
   const tips = useMemo(
     () => extractTips(tipsWithHashes, hashes),
@@ -94,7 +94,6 @@ function Tips ({ className = '', defaultId, hashes, isMember, members, onRefresh
           isMember={isMember}
           key={hash}
           members={members}
-          onRefresh={onRefresh}
           onSelect={onSelectTip}
           onlyUntipped={onlyUntipped}
           tip={tip}

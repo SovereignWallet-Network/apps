@@ -1,16 +1,17 @@
-// Copyright 2017-2020 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { ActionStatus } from '@polkadot/react-components/Status/types';
-import { ModalProps } from '../types';
+import type { ActionStatus } from '@polkadot/react-components/Status/types';
+import type { ModalProps } from '../types';
 
 import React, { useCallback, useState } from 'react';
+
 import { Button, Input, InputAddressSimple, Modal } from '@polkadot/react-components';
 import { useApi } from '@polkadot/react-hooks';
-import keyring from '@polkadot/ui-keyring';
+import { keyring } from '@polkadot/ui-keyring';
 
-import { useTranslation } from '../translate';
 import useProxies from '../Accounts/useProxies';
+import { useTranslation } from '../translate';
 
 interface Props extends ModalProps {
   className?: string;
@@ -76,35 +77,25 @@ function ProxyAdd ({ className = '', onClose, onStatusChange }: Props): React.Re
       size='large'
     >
       <Modal.Content>
-        <Modal.Columns>
-          <Modal.Column>
-            <InputAddressSimple
-              autoFocus
-              help={t<string>('The address that you have a valid proxy setup for.')}
-              isError={!hasOwned}
-              label={t<string>('proxied account')}
-              onChange={setStashAddress}
-              placeholder={t<string>('stash address')}
-            />
-          </Modal.Column>
-          <Modal.Column>
-            <p>{t<string>('The address that has previously setup a proxy to one of the accounts that you control.')}</p>
-          </Modal.Column>
+        <Modal.Columns hint={t<string>('The address that has previously setup a proxy to one of the accounts that you control.')}>
+          <InputAddressSimple
+            autoFocus
+            help={t<string>('The address that you have a valid proxy setup for.')}
+            isError={!hasOwned}
+            label={t<string>('proxied account')}
+            onChange={setStashAddress}
+            placeholder={t<string>('stash address')}
+          />
         </Modal.Columns>
-        <Modal.Columns>
-          <Modal.Column>
-            <Input
-              className='full'
-              help={t<string>('Name given to this proxied account. You can edit it at any later point in time.')}
-              isError={!isNameValid}
-              label={t<string>('name')}
-              onChange={_onChangeName}
-              placeholder={t<string>('proxied name')}
-            />
-          </Modal.Column>
-          <Modal.Column>
-            <p>{t<string>('The name is for unique identification of the account in your owner lists.')}</p>
-          </Modal.Column>
+        <Modal.Columns hint={t<string>('The name is for unique identification of the account in your owner lists.')}>
+          <Input
+            className='full'
+            help={t<string>('Name given to this proxied account. You can edit it at any later point in time.')}
+            isError={!isNameValid}
+            label={t<string>('name')}
+            onChange={_onChangeName}
+            placeholder={t<string>('proxied name')}
+          />
         </Modal.Columns>
       </Modal.Content>
       <Modal.Actions onCancel={onClose}>

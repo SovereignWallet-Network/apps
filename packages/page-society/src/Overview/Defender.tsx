@@ -1,11 +1,12 @@
-// Copyright 2017-2020 @polkadot/app-society authors & contributors
+// Copyright 2017-2021 @polkadot/app-society authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeriveSociety, DeriveSocietyMember } from '@polkadot/api-derive/types';
-import { SocietyVote } from '@polkadot/types/interfaces';
-import { VoteType } from '../types';
+import type { DeriveSociety, DeriveSocietyMember } from '@polkadot/api-derive/types';
+import type { SocietyVote } from '@polkadot/types/interfaces';
+import type { VoteType } from '../types';
 
 import React, { useRef } from 'react';
+
 import { AddressSmall, Table } from '@polkadot/react-components';
 import { useApi, useCall } from '@polkadot/react-hooks';
 
@@ -21,11 +22,10 @@ interface Props {
 }
 
 const transformVotes = {
-  transform: (members: DeriveSocietyMember[]): VoteType[] => {
-    return members
+  transform: (members: DeriveSocietyMember[]): VoteType[] =>
+    members
       .filter(({ vote }): boolean => !!vote)
-      .map(({ accountId, vote }): VoteType => [accountId.toString(), vote as SocietyVote]);
-  }
+      .map(({ accountId, vote }): VoteType => [accountId.toString(), vote as SocietyVote])
 };
 
 function Defender ({ className = '', info, isMember, ownMembers }: Props): React.ReactElement<Props> | null {
@@ -35,7 +35,7 @@ function Defender ({ className = '', info, isMember, ownMembers }: Props): React
 
   const headerRef = useRef([
     [t('defender'), 'start'],
-    [t('votes'), 'expand'],
+    [undefined, 'expand'],
     []
   ]);
 

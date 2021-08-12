@@ -1,14 +1,15 @@
-// Copyright 2017-2020 @polkadot/app-explorer authors & contributors
+// Copyright 2017-2021 @polkadot/app-explorer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DigestItem } from '@polkadot/types/interfaces';
-import { Codec, TypeDef } from '@polkadot/types/types';
+import type { DigestItem } from '@polkadot/types/interfaces';
+import type { Codec, TypeDef } from '@polkadot/types/types';
 
 import React, { useRef } from 'react';
-import { Struct, Tuple, Raw, Vec } from '@polkadot/types';
-import { getTypeDef } from '@polkadot/types/create';
+
 import { Expander, Table } from '@polkadot/react-components';
 import Params from '@polkadot/react-params';
+import { Raw, Struct, Tuple, Vec } from '@polkadot/types';
+import { getTypeDef } from '@polkadot/types/create';
 
 import { useTranslation } from '../translate';
 
@@ -27,10 +28,9 @@ function formatU8a (value: Raw): React.ReactNode {
 }
 
 function formatStruct (struct: Struct): React.ReactNode {
-  const types: Record<string, string> = struct.Type;
-  const params = Object.keys(types).map((name): { name: string; type: TypeDef } => ({
+  const params = Object.entries(struct.Type).map(([name, value]): { name: string; type: TypeDef } => ({
     name,
-    type: getTypeDef(types[name])
+    type: getTypeDef(value)
   }));
   const values = struct.toArray().map((value): { isValid: boolean; value: Codec } => ({
     isValid: true,
@@ -47,8 +47,7 @@ function formatStruct (struct: Struct): React.ReactNode {
 }
 
 function formatTuple (tuple: Tuple): React.ReactNode {
-  const types = tuple.Types;
-  const params = types.map((type): { type: TypeDef } => ({
+  const params = tuple.Types.map((type): { type: TypeDef } => ({
     type: getTypeDef(type)
   }));
   const values = tuple.toArray().map((value): { isValid: boolean; value: Codec } => ({
@@ -99,8 +98,7 @@ function formatItem (item: DigestItem): React.ReactNode {
   return <div>{item.value.toString().split(',').join(', ')}</div>;
 }
 
-function Logs (props: Props): React.ReactElement<Props> | null {
-  const { value } = props;
+function Logs ({ value }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
 
   const headerRef = useRef([[t('logs'), 'start']]);

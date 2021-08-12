@@ -1,8 +1,7 @@
-// Copyright 2017-2020 @polkadot/react-params authors & contributors
+// Copyright 2017-2021 @polkadot/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import { ThemeProps } from '@polkadot/react-components/types';
 import styled from 'styled-components';
 
 interface Props {
@@ -36,7 +35,7 @@ export default React.memo(styled(Holder)`
 
   .ui--Param .ui--Labelled label {
     text-transform: none !important;
-    font-family: ${({ theme }: ThemeProps) => theme.fontMono};
+    font: var(--font-mono);
   }
 
   .ui--row {
@@ -44,7 +43,7 @@ export default React.memo(styled(Holder)`
   }
 
   .ui--Param-Address {
-    font-family: ${({ theme }: ThemeProps) => theme.fontMono};
+    font: var(--font-mono);
   }
 
   .ui--Params-Content {

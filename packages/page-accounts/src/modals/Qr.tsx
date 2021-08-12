@@ -1,14 +1,15 @@
-// Copyright 2017-2020 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2021 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { ActionStatus } from '@polkadot/react-components/Status/types';
-import { ModalProps } from '../types';
+import type { ActionStatus } from '@polkadot/react-components/Status/types';
+import type { ModalProps } from '../types';
 
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
+
 import { AddressRow, Button, Input, InputAddress, Modal, QrScanAddress } from '@polkadot/react-components';
 import { useApi, useIpfs } from '@polkadot/react-hooks';
-import keyring from '@polkadot/ui-keyring';
+import { keyring } from '@polkadot/ui-keyring';
 
 import { useTranslation } from '../translate';
 import PasswordInput from './PasswordInput';
@@ -108,30 +109,23 @@ function QrModal ({ className = '', onClose, onStatusChange }: Props): React.Rea
           ? (
             <>
               <Modal.Columns>
-                <Modal.Column>
-                  <AddressRow
-                    defaultName={name}
-                    noDefaultNameOpacity
-                    value={scanned.content}
-                  />
-                </Modal.Column>
+                <AddressRow
+                  defaultName={name}
+                  noDefaultNameOpacity
+                  value={scanned.content}
+                />
               </Modal.Columns>
-              <Modal.Columns>
-                <Modal.Column>
-                  <Input
-                    autoFocus
-                    className='full'
-                    help={t<string>('Name given to this account. You can change it at any point in the future.')}
-                    isError={!isNameValid}
-                    label={t<string>('name')}
-                    onChange={_onNameChange}
-                    onEnter={_onSave}
-                    value={name}
-                  />
-                </Modal.Column>
-                <Modal.Column>
-                  <p>{t<string>('The local name for this account. Changing this does not affect your on-line identity, so this is only used to indicate the name of the account locally.')}</p>
-                </Modal.Column>
+              <Modal.Columns hint={t<string>('The local name for this account. Changing this does not affect your on-line identity, so this is only used to indicate the name of the account locally.')}>
+                <Input
+                  autoFocus
+                  className='full'
+                  help={t<string>('Name given to this account. You can change it at any point in the future.')}
+                  isError={!isNameValid}
+                  label={t<string>('name')}
+                  onChange={_onNameChange}
+                  onEnter={_onSave}
+                  value={name}
+                />
               </Modal.Columns>
               {!isAddress && (
                 <PasswordInput
@@ -142,24 +136,19 @@ function QrModal ({ className = '', onClose, onStatusChange }: Props): React.Rea
             </>
           )
           : (
-            <Modal.Columns>
-              <Modal.Column>
-                <div className='qr-wrapper'>
-                  <QrScanAddress onScan={_onScan} />
-                </div>
-              </Modal.Column>
-              <Modal.Column>
-                <p>{t<string>('Provide the account QR from the module/external application for scanning. Once detected as valid, you will be taken to the next step to add the account to your list.')}</p>
-              </Modal.Column>
+            <Modal.Columns hint={t<string>('Provide the account QR from the module/external application for scanning. Once detected as valid, you will be taken to the next step to add the account to your list.')}>
+              <div className='qr-wrapper'>
+                <QrScanAddress onScan={_onScan} />
+              </div>
             </Modal.Columns>
           )
         }
       </Modal.Content>
       <Modal.Actions onCancel={onClose}>
         <Button
-          icon='sign-in-alt'
+          icon='plus'
           isDisabled={!scanned || !isValid || (!isAddress && isIpfs)}
-          label={t<string>('Create')}
+          label={t<string>('Save')}
           onClick={_onSave}
         />
       </Modal.Actions>

@@ -1,4 +1,4 @@
-// Copyright 2017-2020 @polkadot/app-staking authors & contributors
+// Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import BN from 'bn.js';
@@ -11,7 +11,7 @@ import MaxBadge from '../../MaxBadge';
 interface Props {
   isElected: boolean;
   isMain?: boolean;
-  nominators?: ([string, BN] | [string, BN, number])[];
+  nominators?: { nominatorId: string }[];
   onlineCount?: false | BN;
   onlineMessage?: boolean;
 }
@@ -21,7 +21,7 @@ function Status ({ isElected, isMain, nominators = [], onlineCount, onlineMessag
   const blockCount = onlineCount && onlineCount.toNumber();
 
   const isNominating = useMemo(
-    () => nominators.some(([nominatorId]) => allAccounts.includes(nominatorId)),
+    () => nominators.some(({ nominatorId }) => allAccounts.includes(nominatorId)),
     [allAccounts, nominators]
   );
 

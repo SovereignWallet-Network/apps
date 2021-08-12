@@ -1,12 +1,13 @@
-// Copyright 2017-2020 @polkadot/react-signer authors & contributors
+// Copyright 2017-2021 @polkadot/react-signer authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { KeyringPair } from '@polkadot/keyring/types';
+import type { KeyringPair } from '@polkadot/keyring/types';
 
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+
 import { Modal, Password, Toggle } from '@polkadot/react-components';
-import keyring from '@polkadot/ui-keyring';
+import { keyring } from '@polkadot/ui-keyring';
 
 import { useTranslation } from './translate';
 import { UNLOCK_MINS } from './util';
@@ -48,28 +49,26 @@ function Unlock ({ address, className, error, onChange, onEnter, tabIndex }: Pro
   }
 
   return (
-    <Modal.Columns className={className}>
-      <Modal.Column>
-        <Password
-          autoFocus
-          isError={!!error}
-          label={t<string>('unlock account with password')}
-          onChange={setPassword}
-          onEnter={onEnter}
-          tabIndex={tabIndex}
-          value={password}
-        >
-          <Toggle
-            isOverlay
-            label={t<string>('unlock for {{expiry}} min', { replace: { expiry: UNLOCK_MINS } })}
-            onChange={setIsUnlockCached}
-            value={isUnlockCached}
-          />
-        </Password>
-      </Modal.Column>
-      <Modal.Column>
-        <p>{t('Unlock the sending account to allow signing of this transaction.')}</p>
-      </Modal.Column>
+    <Modal.Columns
+      className={className}
+      hint={t('Unlock the sending account to allow signing of this transaction.')}
+    >
+      <Password
+        autoFocus
+        isError={!!error}
+        label={t<string>('unlock account with password')}
+        onChange={setPassword}
+        onEnter={onEnter}
+        tabIndex={tabIndex}
+        value={password}
+      >
+        <Toggle
+          isOverlay
+          label={t<string>('unlock for {{expiry}} min', { replace: { expiry: UNLOCK_MINS } })}
+          onChange={setIsUnlockCached}
+          value={isUnlockCached}
+        />
+      </Password>
     </Modal.Columns>
   );
 }

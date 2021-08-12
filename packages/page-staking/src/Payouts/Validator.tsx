@@ -1,17 +1,18 @@
-// Copyright 2017-2020 @polkadot/app-staking authors & contributors
+// Copyright 2017-2021 @polkadot/app-staking authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { PayoutValidator } from './types';
+import type { PayoutValidator } from './types';
 
 import BN from 'bn.js';
 import React, { useMemo } from 'react';
+
 import { AddressMini, AddressSmall, Expander } from '@polkadot/react-components';
 import { BlockToTime, FormatBalance } from '@polkadot/react-query';
 
 import { useTranslation } from '../translate';
 import PayButton from './PayButton';
-import { createErasString } from './util';
 import useEraBlocks from './useEraBlocks';
+import { createErasString } from './util';
 
 interface Props {
   className?: string;
@@ -65,7 +66,7 @@ function Validator ({ className = '', isDisabled, payout }: Props): React.ReactE
         <span className='payout-eras'>{eraStr}</span>
       </td>
       <td className='number'><FormatBalance value={payout.available} /></td>
-      <td className='number'>{eraBlocks && <BlockToTime blocks={eraBlocks} />}</td>
+      <td className='number'>{eraBlocks && <BlockToTime value={eraBlocks} />}</td>
       <td
         className='expand'
         colSpan={2}

@@ -1,15 +1,16 @@
-// Copyright 2017-2020 @polkadot/app-council authors & contributors
+// Copyright 2017-2021 @polkadot/app-council authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { SubmittableExtrinsic } from '@polkadot/api/types';
+import type { SubmittableExtrinsic } from '@polkadot/api/types';
 
 import React, { useCallback, useEffect, useState } from 'react';
+
+import { getProposalThreshold } from '@polkadot/apps-config';
 import { Button, Input, InputAddress, Modal, TxButton } from '@polkadot/react-components';
 import { useApi, useToggle } from '@polkadot/react-hooks';
 import { isHex } from '@polkadot/util';
 
 import { useTranslation } from '../translate';
-import { getThreshold } from '../thresholds';
 
 interface Props {
   className?: string;
@@ -35,7 +36,7 @@ function ProposeExternal ({ className = '', isMember, members }: Props): React.R
   const [{ proposal, proposalLength }, setProposal] = useState<ProposalState>({ proposalLength: 0 });
   const [{ hash, isHashValid }, setHash] = useState<HashState>({ hash: '', isHashValid: false });
 
-  const threshold = Math.ceil((members.length || 0) * getThreshold(api));
+  const threshold = Math.ceil((members.length || 0) * getProposalThreshold(api));
 
   const _onChangeHash = useCallback(
     (hash?: string): void => setHash({ hash, isHashValid: isHex(hash, 256) }),
@@ -73,34 +74,24 @@ function ProposeExternal ({ className = '', isMember, members }: Props): React.R
           size='large'
         >
           <Modal.Content>
-            <Modal.Columns>
-              <Modal.Column>
-                <InputAddress
-                  filter={members}
-                  help={t<string>('Select the account you wish to make the proposal with.')}
-                  label={t<string>('propose from account')}
-                  onChange={setAcountId}
-                  type='account'
-                  withLabel
-                />
-              </Modal.Column>
-              <Modal.Column>
-                <p>{t<string>('The council account for the proposal. The selection is filtered by the current members.')}</p>
-              </Modal.Column>
+            <Modal.Columns hint={t<string>('The council account for the proposal. The selection is filtered by the current members.')}>
+              <InputAddress
+                filter={members}
+                help={t<string>('Select the account you wish to make the proposal with.')}
+                label={t<string>('propose from account')}
+                onChange={setAcountId}
+                type='account'
+                withLabel
+              />
             </Modal.Columns>
-            <Modal.Columns>
-              <Modal.Column>
-                <Input
-                  autoFocus
-                  help={t<string>('The preimage hash of the proposal')}
-                  label={t<string>('preimage hash')}
-                  onChange={_onChangeHash}
-                  value={hash}
-                />
-              </Modal.Column>
-              <Modal.Column>
-                <p>{t<string>('The hash of the proposal image, either already submitted or valid for the specific call.')}</p>
-              </Modal.Column>
+            <Modal.Columns hint={t<string>('The hash of the proposal image, either already submitted or valid for the specific call.')}>
+              <Input
+                autoFocus
+                help={t<string>('The preimage hash of the proposal')}
+                label={t<string>('preimage hash')}
+                onChange={_onChangeHash}
+                value={hash}
+              />
             </Modal.Columns>
           </Modal.Content>
           <Modal.Actions onCancel={toggleVisible}>
@@ -115,7 +106,7 @@ function ProposeExternal ({ className = '', isMember, members }: Props): React.R
                   ? [threshold, proposal, proposalLength]
                   : [threshold, proposal]
               }
-              tx='council.propose'
+              tx={api.tx.council.propose}
             />
           </Modal.Actions>
         </Modal>

@@ -1,11 +1,11 @@
-// Copyright 2017-2020 @polkadot/app-js authors & contributors
+// Copyright 2017-2021 @polkadot/app-js authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Log } from './types';
+import type { Log } from './types';
 
 import React from 'react';
-import { ThemeProps } from '@polkadot/react-components/types';
 import styled from 'styled-components';
+
 import { isError, isNull, isUndefined } from '@polkadot/util';
 
 interface Props {
@@ -60,8 +60,7 @@ export default React.memo(styled(Output)`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  font-family: ${({ theme }: ThemeProps) => theme.fontMono};
-  font-size: 12px;
+  font: var(--font-mono);
   font-variant-ligatures: common-ligatures;
   line-height: 18px;
   padding: 50px 10px 10px;

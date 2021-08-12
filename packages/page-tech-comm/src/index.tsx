@@ -1,13 +1,14 @@
-// Copyright 2017-2020 @polkadot/app-tech-comm authors & contributors
+// Copyright 2017-2021 @polkadot/app-tech-comm authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Option } from '@polkadot/types';
-import { AccountId, Hash } from '@polkadot/types/interfaces';
+import type { Option } from '@polkadot/types';
+import type { AccountId, Hash } from '@polkadot/types/interfaces';
 
 import React, { useMemo } from 'react';
 import { Route, Switch } from 'react-router';
-import { useApi, useCall, useMembers } from '@polkadot/react-hooks';
+
 import { Tabs } from '@polkadot/react-components';
+import { useApi, useCall, useMembers } from '@polkadot/react-hooks';
 
 import Overview from './Overview';
 import Proposals from './Proposals';
@@ -35,7 +36,7 @@ function TechCommApp ({ basePath, className }: Props): React.ReactElement<Props>
     {
       isRoot: true,
       name: 'overview',
-      text: t<string>('Tech. committee')
+      text: t<string>('Overview')
     },
     {
       name: 'proposals',
@@ -45,12 +46,10 @@ function TechCommApp ({ basePath, className }: Props): React.ReactElement<Props>
 
   return (
     <main className={className}>
-      <header>
-        <Tabs
-          basePath={basePath}
-          items={items}
-        />
-      </header>
+      <Tabs
+        basePath={basePath}
+        items={items}
+      />
       <Switch>
         <Route path={`${basePath}/proposals`}>
           <Proposals

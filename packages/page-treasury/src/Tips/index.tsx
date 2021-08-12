@@ -1,10 +1,11 @@
-// Copyright 2017-2020 @polkadot/app-treasury authors & contributors
+// Copyright 2017-2021 @polkadot/app-treasury authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { SubmittableExtrinsic } from '@polkadot/api/types';
+import type { SubmittableExtrinsic } from '@polkadot/api/types';
 
 import BN from 'bn.js';
 import React, { useCallback, useMemo, useState } from 'react';
+
 import { Button, TxButton } from '@polkadot/react-components';
 import { useAccounts, useApi } from '@polkadot/react-hooks';
 
@@ -17,7 +18,6 @@ interface Props {
   hashes?: string[] | null;
   isMember: boolean;
   members: string[];
-  trigger: () => void;
 }
 
 interface QuickTipsState {
@@ -25,7 +25,7 @@ interface QuickTipsState {
   quickTx: SubmittableExtrinsic<'promise'> | null;
 }
 
-function TipsEntry ({ className, hashes, isMember, members, trigger }: Props): React.ReactElement<Props> {
+function TipsEntry ({ className, hashes, isMember, members }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { allAccounts } = useAccounts();
   const { api } = useApi();
@@ -42,7 +42,7 @@ function TipsEntry ({ className, hashes, isMember, members, trigger }: Props): R
 
       const available = Object
         .entries(quickTips)
-        .map(([hash, value]) => value ? api.tx.treasury.tip(hash, value) : null)
+        .map(([hash, value]) => value && (api.tx.tips || api.tx.treasury).tip(hash, value))
         .filter((value): value is SubmittableExtrinsic<'promise'> => !!value);
 
       return {
@@ -60,10 +60,7 @@ function TipsEntry ({ className, hashes, isMember, members, trigger }: Props): R
   return (
     <div className={className}>
       <Button.Group>
-        <TipCreate
-          members={members}
-          refresh={trigger}
-        />
+        <TipCreate members={members} />
         <TxButton
           accountId={defaultId}
           extrinsic={quickTx}
@@ -77,7 +74,6 @@ function TipsEntry ({ className, hashes, isMember, members, trigger }: Props): R
         hashes={hashes}
         isMember={isMember}
         members={members}
-        onRefresh={trigger}
         onSelectTip={_selectTip}
       />
     </div>
