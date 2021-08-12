@@ -67,6 +67,20 @@ export function createDev (t: TFunction): LinkOption[] {
       text: t('rpc.metablockchain', 'metablockchain-runtime Local', { ns: 'apps-config' }),
       textBy: t('rpc.hosted.by', 'hosted by {{host}}', { ns: 'apps-config', replace: { host: 'Metablockchain' } }),
       value: 'ws://127.0.0.1:9944'
+    },
+    {
+      dnslink: 'testnet',
+      info: 'metablockchain-runtime',
+      text: t('rpc.metablockchain', 'metablockchain-runtime Testnet', { ns: 'apps-config' }),
+      textBy: t('rpc.hosted.by', 'hosted by {{host}}', { ns: 'apps-config', replace: { host: 'Metablockchain' } }),
+      value: 'wss://n1testnet.metabit.exchange'
+    },
+    {
+      dnslink: 'mainnet',
+      info: 'metablockchain-runtime',
+      text: t('rpc.metablockchain', 'metablockchain-runtime Mainnet', { ns: 'apps-config' }),
+      textBy: t('rpc.hosted.by', 'hosted by {{host}}', { ns: 'apps-config', replace: { host: 'Metablockchain' } }),
+      value: 'wss://mui.metablockchain.id'
     }
   ];
 }

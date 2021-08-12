@@ -181,6 +181,18 @@ function createTestNetworks (t: TFunction): LinkOption[] {
       text: t('rpc.metablockchain', 'metablockchain-runtime', { ns: 'apps-config' }),
       textBy: t('rpc.hosted.by', 'hosted by {{host}}', { ns: 'apps-config', replace: { host: 'Metablockchain' } }),
       value: 'ws://127.0.0.1:9944'
+    },
+    {
+      info: 'metablockchain-runtime',
+      text: t('rpc.metablockchain', 'metablockchain-runtime Testnet', { ns: 'apps-config' }),
+      textBy: t('rpc.hosted.by', 'hosted by {{host}}', { ns: 'apps-config', replace: { host: 'Metablockchain' } }),
+      value: 'wss://n1testnet.metabit.exchange'
+    },
+    {
+      info: 'metablockchain-runtime',
+      text: t('rpc.metablockchain', 'metablockchain-runtime Mainnet', { ns: 'apps-config' }),
+      textBy: t('rpc.hosted.by', 'hosted by {{host}}', { ns: 'apps-config', replace: { host: 'Metablockchain' } }),
+      value: 'wss://mui.metablockchain.id'
     }
   ];
 }
