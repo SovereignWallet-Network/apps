@@ -190,6 +190,12 @@ function createTestNetworks (t: TFunction): LinkOption[] {
     },
     {
       info: 'metablockchain-runtime',
+      text: t('rpc.metablockchain', 'metablockchain-runtime Testnet N3', { ns: 'apps-config' }),
+      textBy: t('rpc.hosted.by', 'hosted by {{host}}', { ns: 'apps-config', replace: { host: 'Metablockchain' } }),
+      value: 'wss://n3testnet.metabit.exchange'
+    },
+    {
+      info: 'metablockchain-runtime',
       text: t('rpc.metablockchain', 'metablockchain-runtime Mainnet', { ns: 'apps-config' }),
       textBy: t('rpc.hosted.by', 'hosted by {{host}}', { ns: 'apps-config', replace: { host: 'Metablockchain' } }),
       value: 'wss://mui.metablockchain.id'
